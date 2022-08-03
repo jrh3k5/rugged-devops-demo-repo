@@ -3,7 +3,12 @@ name: Deploy to Test for Integration Testing
 on:
   push:
     branches:
-      - test
+      - dev
+      - develop
+      - development
+      - 'dev/*'
+      - 'develop/*'
+      - 'development/*'
       
   workflow_dispatch:
 
