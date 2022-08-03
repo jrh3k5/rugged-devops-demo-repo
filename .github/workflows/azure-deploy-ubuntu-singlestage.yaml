@@ -3,7 +3,7 @@ name: Deploy DN6 Web Ubuntu Agent Single Stage
 on:
   push:
     branches:
-      - main
+      - nope
       
   workflow_dispatch:
 
