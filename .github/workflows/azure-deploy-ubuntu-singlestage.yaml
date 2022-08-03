@@ -1,0 +1,43 @@
+name: Deploy DN6 Web Ubuntu Agent Single Stage
+
+on:
+  push:
+    branches:
+      - main
+      
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: '12345-dev1-lobwebapp'
+  AZURE_WEBAPP_SLOT: 'production' #'production' || 'staging'
+  AZURE_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E0654266E5DC463FA91F26443B8ABD3F }}
+  DOT_NET_VERSION: '6.0.x'
+  DEPLOY_APP_FOLDER: 'myapp'
+  
+jobs:
+  build-and-deploy:
+    name: 'Build And Deploy to Azure'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+       name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOT_NET_VERSION }}
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o dotnetcorewebapp
+        
+      - name: 'Deploy to Azure WebApp'
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: ${{ env.AZURE_WEBAPP_SLOT }}
+          publish-profile: ${{ env.AZURE_PUBLISH_PROFILE }}
+          package: './dotnetcorewebapp' 
