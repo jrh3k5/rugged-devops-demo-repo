@@ -35,7 +35,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RG_NAME }}
-        template: ./azure-deploy-dev-env.json
+        template: ./deploy-dev-environment.json
         parameters: 
           webAppName=rdo-${{ env.CURRENT_BRANCH }}-dev
           
