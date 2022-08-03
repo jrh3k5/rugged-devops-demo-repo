@@ -1,17 +1,14 @@
-name: Build, deploy, and cleanup artifact for ASP.Net Core app to Azure Web App
+name: Build and deploy ASP.Net Core app to Azure Web App
 
 on:
   push:
     branches:
-      - main
+      - nope
   workflow_dispatch:
 
-env:
-  AZURE_WEBAPP_NAME: <your-web-app-name-here>
-  
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -35,10 +32,10 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'staging'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -51,13 +48,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'staging'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_UPDATE_YOUR_UID_HERE }}
+          app-name: '12345-dev1-lobwebapp'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E0654266E5DC463FA91F26443B8ABD3F }}
           package: .
-          
-      #Delete Archive to keep GitHub account clean
-      - name: Delete Artifact
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: .net-app
