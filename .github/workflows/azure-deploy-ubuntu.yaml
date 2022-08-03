@@ -1,0 +1,63 @@
+name: Build, deploy, and cleanup artifact for ASP.Net Core app to Azure Web App
+
+on:
+  push:
+    branches:
+      - nope
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: '12345-dev1-lobwebapp'
+  AZURE_WEBAPP_SLOT: 'production' #'production' || 'staging'
+  AZURE_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E0654266E5DC463FA91F26443B8ABD3F }}
+  DOT_NET_VERSION: '6.0.x'
+  DEPLOY_APP_FOLDER: 'myapp'
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Build .Net Application'
+      
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOT_NET_VERSION }}
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/${{ env.DEPLOY_APP_FOLDER }}
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/${{ env.DEPLOY_APP_FOLDER }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Deploy Web Application'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: ${{ env.AZURE_WEBAPP_SLOT }}
+          publish-profile: ${{ env.AZURE_PUBLISH_PROFILE }}
+          package: .
