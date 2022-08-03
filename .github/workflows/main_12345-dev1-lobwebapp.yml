@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - 12345-dev1-lobwebapp
 on:
   push:
     branches:
-      - main
+      - nope
   workflow_dispatch:
 
 jobs:
