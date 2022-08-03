@@ -1,4 +1,4 @@
-name: Deploy DN6 Web Ubuntu Agent Single Stage
+name: Deploy to Staging for Production Release w/Swap
 
 on:
   push:
@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'your-app-name-here'
-  AZURE_WEBAPP_SLOT: 'production' #'production' || 'staging'
-  AZURE_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_your-secret-uid-here }}
+  AZURE_WEBAPP_NAME: 'app-name-here'
+  AZURE_WEBAPP_SLOT: 'staging' # 'production' || 'staging' || 'qa' || 'test'
+  AZURE_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_secretid }}
   DOT_NET_VERSION: '6.0.x'
   DEPLOY_APP_FOLDER: 'dotnetcorewebapp'
 
