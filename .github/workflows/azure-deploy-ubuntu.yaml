@@ -3,7 +3,7 @@ name: Build, deploy, and cleanup artifact for ASP.Net Core app to Azure Web App
 on:
   push:
     branches:
-      - main
+      - nope
   workflow_dispatch:
 
 env:
