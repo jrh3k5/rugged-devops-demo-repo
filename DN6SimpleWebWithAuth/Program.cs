@@ -20,14 +20,13 @@ builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIG
 // *************
 // NOTE: IF you do this, you will never be able to roll-back a migration with this code in place.  Use at your own discretion:
 // **************
-/*
 //automatically apply database migrations (breaks solution if database not wired up correctly, forces roll-forward approach
 var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(connectionString).Options;
 using (var context = new ApplicationDbContext(contextOptions))
 {
     context.Database.Migrate();
 }
-*/
+
 
 /* 
 *************************** 
