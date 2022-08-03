@@ -1,0 +1,25 @@
+name: Owasp Lightweight Pen Testing
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - main
+
+  repository_dispatch:
+    types: [owasp-baseline-scan]
+
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: https://rugged-dev-ops-live-web-staging.azurewebsites.net/
+
+jobs:
+  baseline-testing:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ZAP Scan
+      uses: zaproxy/action-baseline@v0.6.1
+      with:
+        target: '${{ env.AZURE_WEBAPP_NAME }}'
