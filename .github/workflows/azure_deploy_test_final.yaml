@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'app-name-here'
+  AZURE_WEBAPP_NAME: 'rugged-dev-ops-live-web'
   AZURE_WEBAPP_SLOT: 'test' # 'production' || 'staging' || 'qa' || 'test'
   AZURE_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_TEST_SLOT }}
   DOT_NET_VERSION: '6.0.x'
